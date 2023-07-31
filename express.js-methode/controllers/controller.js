@@ -6,17 +6,23 @@ const user = require('../dbModels/userModel')
 
 
 const getContacts = asyncErrorhandler(async (req, res) => {
-    const extUsers = await user.find()
+    const extUsers = await user.find({user_id:req.user._id})
     if (extUsers) {
         res.status(200).json({ message: 'okk everything works fine', extUsers })
     }
 })
 const createContact = asyncErrorhandler(async (req, res) => {
     const { name, email, phone_no } = req.body
+    const conatctAlreadyPresent = await user.findOne({name:name})
+    if(conatctAlreadyPresent){
+        res.status(400)
+        throw new Error('the name is already present..')
+    }
     const newUser = new user({
         name, 
         email,
-        phone_no
+        phone_no,
+        user_id:req.user._id
     })
     const newUserData = await newUser.save()
     if (newUserData) {
@@ -28,15 +34,21 @@ const createContact = asyncErrorhandler(async (req, res) => {
 
 const getOneContact = asyncErrorhandler(async (req, res) => {
     const userId = req.params.id
-
     const oneContact = await user.findById(userId)
-    if (oneContact) {
-        res.status(200).json({ oneContact })
+    if (oneContact.user_id.toString() !==req.user._id) {
+        res.status(401)
+        throw new Error('you are not an authorized person')
     }
+    res.status(200).json({ oneContact })
 })
 const updateConatct = asyncErrorhandler(async(req, res) => {
     const userId = req.params.id
     const { name, email, phone_no } = req.body
+    const oneContact = await user.findById(userId)
+    if (oneContact.user_id.toString() !== req.user._id) {
+        res.status(401)
+        throw new Error('you are not an authorized person')
+    }
     const updateUserContact = await user.findOneAndUpdate({_id:userId},{
         name,
         email, 
@@ -50,6 +62,11 @@ const updateConatct = asyncErrorhandler(async(req, res) => {
 })
 const deleteContact = asyncErrorhandler(async(req, res) => {
     const userId = req.params.id
+    const oneContact = await user.findById(userId)
+    if (oneContact.user_id.toString() !== req.user._id) {
+        res.status(401)
+        throw new Error('you are not an authorized person')
+    }
     const deleteContact = await user.deleteOne({_id:userId})
     if(!deleteContact){
         res.status(400)

@@ -7,14 +7,13 @@ const {getContacts,
     updateConatct,
     deleteContact} = require('../controllers/controller')
 const validateReqBody  = require('../middleWare/nullBody')
-
-
-
+const jwtValidator = require('../middleWare/jwtvalidator')
+routes.use(jwtValidator)
 routes.get('/',getContacts)
 routes.post('/',validateReqBody,createContact)
 routes.get('/:id', validateUserId,getOneContact)
 routes.put('/:id',validateReqBody, validateUserId ,updateConatct)
-routes.delete('/:id', validateUserId ,deleteContact)
+routes.delete('/:id',validateUserId ,deleteContact)
 
 
 module.exports = routes

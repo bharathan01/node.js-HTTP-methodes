@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 
 const users = mongoose.Schema({
+    user_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        require:true,
+        ref:"newUsers"
+    },
     name:{
         type:String,
         type: String,
