@@ -26,7 +26,7 @@ switch (statusCode) {
         break;
     case 403:
         res.json({
-            title:'Forbidden', 
+            title:'Forbidden',  
              message:err.message,
              stackTrace:err.stack
         });
@@ -47,7 +47,11 @@ switch (statusCode) {
     break;
                       
     default:
-        console.log('Somthing is wrong ! please try after some time')
+        res.json({
+            title:'Sever Error',
+           message:err.message,
+           stackTrace:err.stack
+           })
         break;
 }
 }

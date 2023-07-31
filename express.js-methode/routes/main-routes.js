@@ -6,13 +6,14 @@ const {getContacts,
     getOneContact,
     updateConatct,
     deleteContact} = require('../controllers/controller')
+const validateReqBody  = require('../middleWare/nullBody')
 
 
 
 routes.get('/',getContacts)
-routes.post('/',createContact)
+routes.post('/',validateReqBody,createContact)
 routes.get('/:id', validateUserId,getOneContact)
-routes.put('/:id', validateUserId ,updateConatct)
+routes.put('/:id',validateReqBody, validateUserId ,updateConatct)
 routes.delete('/:id', validateUserId ,deleteContact)
 
 

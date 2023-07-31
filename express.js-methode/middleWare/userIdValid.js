@@ -10,4 +10,4 @@ const validateUserId = (req,res,next) =>{
     }
 
 }
-module.exports = validateUserId 
+module.exports = validateUserId  

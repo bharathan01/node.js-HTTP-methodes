@@ -1,25 +1,25 @@
 const mongoose = require('mongoose')
 
-const userContact = mongoose.Schema({
+const users = mongoose.Schema({
     name:{
         type:String,
         type: String,
         required: [true,'the name must needed'],
-        unique: true,
+        unique: false, 
     },
     email:{
         type:String,
         required: [true,'the email address must needed'],
-        unique: true,
+        unique: false,
     },
     phone_no:{
         type:String,
         required: [true,'the phone number must needed'],
-        unique: true,
+        unique: false,
     }
 
 },{
     timestamps:true
 })
 
-module.exports = mongoose.model('userContacts', userContact)
+module.exports = mongoose.model('user', users)
